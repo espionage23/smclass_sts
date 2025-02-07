@@ -17,6 +17,14 @@ public class BoardController {
 
 	@Autowired BService bService;
 	
+	@GetMapping("/bview")
+	public String bview(int bno) {
+		System.out.println("bno : " + bno);
+		BoardDto boardDto = bService.bview(bno);
+		return "/board/bview";
+	}
+	
+	
 	@GetMapping("/blist")
 	public String blist(Model model) {
 		//service 연결
