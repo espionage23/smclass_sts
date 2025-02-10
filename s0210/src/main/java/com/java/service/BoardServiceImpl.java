@@ -9,21 +9,19 @@ import com.java.dao.BoardMapper;
 import com.java.dto.BoardDto;
 
 @Service
-public class BServiceImpl implements BService {
+public class BoardServiceImpl implements BoardService {
 
 	@Autowired BoardMapper boardMapper;
 	
-	@Override
+	@Override	//게시판
 	public ArrayList<BoardDto> blist() {
-		ArrayList<BoardDto> list = new ArrayList<>();
-		list = boardMapper.boardSelect();
+		ArrayList<BoardDto> list = boardMapper.selectAll();
 		return list;
 	}
 
-	@Override
-	public BoardDto bview(int bno) {
-		// TODO Auto-generated method stub
-		return null;
+	@Override	// 글쓰기
+	public void boardwrite(BoardDto bdto) {
+		boardMapper.insertBoard(bdto);
 	}
-
+	
 }
