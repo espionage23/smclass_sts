@@ -53,9 +53,14 @@
       <!-- 내용부분 -->
       <c:forEach items="${list}" var="bdto">
 	      <tr>
-	        <td><span class="table-notice"></span></td>
+	        <td><span class="table-notice">${bdto.bno }</span></td>
 	        <td class="table-title">
-	        <a href="/board/bview?bno=${bdto.bno }">${bdto.btitle}</a>
+	        <a href="/board/bview?bno=${bdto.bno }">
+	        	<c:forEach var="i" begin="1" end="${bdto.bindent}">
+	        	▶
+	        	</c:forEach>
+	        	${bdto.btitle}
+        	</a>
 	        </td>
 	        <td>${bdto.id}</td>
 	        <td>${bdto.bdate}</td>
@@ -68,7 +73,16 @@
     <ul class="page-num">
       <li class="first"></li>
       <li class="prev"></li>
-      <li class="num"><div>1</div></li>
+      <c:forEach var="i" begin="${startpage}" end="${endpage }">
+      <c:if test="${page==i}">
+      	  <li class="num"><div>${i}</div></li>
+      </c:if>
+      <c:if test="${page!=i}">
+	      <a href="/board/blist?page=${i}">
+	      	<li class="num"><div>${i}</div></li>
+	      </a>
+      </c:if>
+      </c:forEach>
       <li class="next"></li>
       <li class="last"></li>
     </ul>

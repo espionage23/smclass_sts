@@ -6,14 +6,40 @@
 <mapper namespace="com.java.dao.BoardMapper">
 	<!-- 게시글 전체리스트 -->
 	<select id="selectAll" resultType="com.java.dto.BoardDto">
-		select * from board order by
-		bno desc
+		select * from(
+		select row_number() over(order by bgroup desc, bstep asc)rnum,a.*from board
+		a
+		)where rnum between #{startrow} and #{endrow}
 	</select>
 
 	<!-- 1개 게시글 가져오기 -->
 	<select id="selectOne" resultType="com.java.dto.BoardDto">
 		select * from board where
 		bno=#{bno}
+	</select>
+	
+	<!-- 이전 게시글 -->
+	<select id="selectOnePrev" resultType="com.java.dto.BoardDto">
+		select * from board where
+		bno =
+		(select prev_bno from
+		(select bno, lead(bno,1,-1) over(order by
+		bgroup desc, bstep asc)as prev_bno
+		from board
+		)where bno=#{bno}
+		)
+	</select>
+	
+	<!-- 다음 게시글 -->
+	<select id="selectOneNext" resultType="com.java.dto.BoardDto">
+		select * from board where
+		bno =
+		(select prev_bno from
+		(select bno, lag(bno,1,-1) over(order by
+		bgroup desc, bstep asc)as prev_bno
+		from board
+		)where bno=#{bno}
+		)
 	</select>
 
 
@@ -23,17 +49,43 @@
 		board_seq.nextval,#{btitle},#{bcontent},#{id},board_seq.currval,0,0,0,sysdate
 		)
 	</insert>
-	
-	
+
+
 	<!-- 조회수 업데이트 -->
 	<update id="updateBHit">
 		update board set bhit=bhit+1 where bno=#{bno}
 	</update>
-	
+
 	<!-- 게시글 삭제 -->
 	<delete id="deleteBoard">
 		delete board where bno=#{bno}
 	</delete>
+
+	<!-- 게시글 수정저장 -->
+	<update id="updateBoard">
+		update board set btitle=#{btitle},
+		bcontent=#{bcontent}, bdate=sysdate where bno=#{bno}
+	</update>
+
+	<!-- 답변달기 : 자식게시글 bstep 1 증가 -->
+	<update id="bstepUp">
+		update board set bstep = bstep+1 where
+		bgroup=#{bgroup}
+		and bstep>#{bstep}
+	</update>
+	<!-- 답변달기 : 저장 -->
+	<insert id="InsertBreply">
+		insert into board values (
+		board_seq.nextval,#{btitle},#{bcontent},#{id},
+		#{bgroup},#{bstep}+1,#{bindent}+1,0,sysdate
+		)
+	</insert>
 	
+	
+	<select id="countAll">
+		select count(*) from board
+	</select>
+
+
 
 </mapper>
