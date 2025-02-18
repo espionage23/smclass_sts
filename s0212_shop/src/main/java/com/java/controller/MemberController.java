@@ -25,14 +25,42 @@ public class MemberController {
 	public String step01() {
 		return "member/step01";
 	}
+
+	@GetMapping("/member/step02") //회원가입2
+	public String step02() {
+		session.removeAttribute("pwCode");	// 섹션삭제
+		return "member/step02";
+	}
 	
-	@ResponseBody //이메일 발송
+	@ResponseBody //이메일 발송 - text
 	@PostMapping("/member/sendEmail")
 	public String sendEmail(String email) {
 		System.out.println("sendEmail : "+email);
-		String pwCode = memberService.sendEmail(email);
-				
+		String pwCode = memberService.sendEmail(email); //email발송-text
 		return pwCode;
+		
+	}
+	
+	@ResponseBody //이메일 발송2 - html
+	@PostMapping("/member/sendEmail2")
+	public String sendEmail2(String email) {
+		System.out.println("sendEmail2 : "+email);
+		String pwCode = memberService.sendEmail2(email); //email발송-html
+		session.setAttribute("pwCode", pwCode);
+		return pwCode;
+		
+	}
+
+	@ResponseBody // 인증코드 확인
+	@PostMapping("/member/pwCodeCheck")
+	public String pwCodeCheck(String pwCode) {
+		System.out.println("pwCodeCheck pwCode: "+pwCode);
+		String pw = (String)session.getAttribute("pwCode");
+		if(pwCode.equals(pw)) {
+			return "1";
+		}else {
+			return "0";
+		}
 		
 	}
 	
@@ -45,12 +73,12 @@ public class MemberController {
 	}
 	
 	@GetMapping("/member/login")
-	public String login(HttpServletResponse response,
-			HttpServletRequest request) {
-		//쿠키생성
-		Cookie cookie = new Cookie("cook_id", "aaa");
-		cookie.setMaxAge(60*10);
-		response.addCookie(cookie);
+	public String login(HttpServletResponse response) {
+		//쿠키 생성 - 자바에서 생성
+//		Cookie cookie = new Cookie("cook_id", "aaa");
+//		cookie.setMaxAge(60*60*24); //1일
+//		response.addCookie(cookie); //cookie저장
+		
 		return "member/login";
 	}
 	
