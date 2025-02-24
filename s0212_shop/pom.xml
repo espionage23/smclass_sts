@@ -116,7 +116,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
-			<version>3.0.2</version>
 		</dependency>
 
 		<!-- email html메일 보냄-->
@@ -125,6 +124,7 @@
 			<artifactId>javax.mail-api</artifactId>
 			<version>1.6.2</version>
 		</dependency>
+
 
 	</dependencies>
 
