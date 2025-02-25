@@ -9,15 +9,21 @@ import com.java.dto.BoardDto;
 
 
 public interface BoardRepository extends JpaRepository<BoardDto, Integer>{
+
+	// select * from boarddto where btitle like '%search%'
+//	@Query(value = "select * from boarddto where btitle like %:search%",
+//			nativeQuery = true)
+//	List<BoardDto> findByBtitleOrBcontentContaining(String search);
+	List<BoardDto> findByBtitleContaining(String search);
 	
 	// Memberdto 로그인부분 쿼리
 //	@Query(value = "select * from memberdto where id=? and pw=?",
 //			nativeQuery = true)
 //	Optional<MemberDto> findByIdAndPw(String id, String pw);
 
-	@Query(value = "select * from boarddto order by bgroup desc, bstep asc",
-			nativeQuery = true)
-	List<BoardDto> findAll();
+//	@Query(value = "select * from boarddto order by bgroup desc, bstep asc",
+//			nativeQuery = true)
+//	List<BoardDto> findAll();
 	
 	
 }

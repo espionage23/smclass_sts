@@ -35,7 +35,7 @@
 	        <td><a href="/">${bdto.btitle }</a></td>
 	        <td>${bdto.memberDto.id }</td>
 	        <td>${bdto.bdate }</td>
-	        <td>${bdto.bfile }</td>
+	        <td>${bdto.bhit }</td>
 	      </tr>
 	    
 	  </table>
